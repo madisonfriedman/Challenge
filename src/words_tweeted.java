@@ -192,4 +192,20 @@ public class words_tweeted {
 			return this.count;
 		}
 	}
+	
+	//sample skip function from stackoverflow
+	public static void skip(InputStream is, long n) throws IOException {
+    		while(n > 0) {
+        		long n1 = is.skip(n);
+	 		if( n1 > 0 ) {
+            			n -= n1;
+        		} else if( n1 == 0 ) {
+            			if( is.read() == -1)  // EOF
+                			break;
+            			else 
+                			n--;
+        		} else 
+        		throw new IOException("skip() returned a negative value");
+    		}
+	}
 }
