@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.io.IOException;
 
 public class words_tweeted {
 	
@@ -194,18 +195,20 @@ public class words_tweeted {
 	}
 	
 	//sample skip function from stackoverflow to help read in files > 2GB
-	public static void skip(InputStream is, long n) throws IOException {
+	public static void skip(BufferedInputStream bis, long n) throws IOException {
     		while(n > 0) {
-        		long n1 = is.skip(n);
+        		long n1 = bis.skip(n);
 	 		if( n1 > 0 ) {
             			n -= n1;
-        		} else if( n1 == 0 ) {
-            			if( is.read() == -1)  // EOF
+        		} 
+        		else if( n1 == 0 ) {
+            			if( bis.read() == -1)  // EOF
                 			break;
             			else 
                 			n--;
-        		} else 
-        		throw new IOException("skip() returned a negative value");
+        		} 
+        		else 
+        			throw new IOException("skip() returned a negative value");
     		}
 	}
 }
