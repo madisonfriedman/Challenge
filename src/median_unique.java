@@ -14,6 +14,9 @@ public class median_unique {
 	 * were in a sorted list, keep track of the range of "indices" which equal the current median unique word count. If 
 	 * the median index is outside the current range, adjust the median unique word count and shift the range of indices. 
 	 * This gives O(1) insertion/median return time per tweet and constant memory usage, far better than using PriorityQueue.
+	 *
+	 * Another plus with this implementation is that it is much easier (in terms of speed and code) to visualize the 
+	 * overall distribution of unique word count frequencies. 
 	 */
 	
 	public static void main(String[] args) throws Exception {
