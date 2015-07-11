@@ -16,7 +16,8 @@ public class median_unique {
 	 * This gives O(1) insertion/median return time per tweet and constant memory usage, far better than using PriorityQueue.
 	 *
 	 * Another plus with this implementation is that it is much easier (in terms of speed and code) to visualize the 
-	 * overall distribution of unique word count frequencies. 
+	 * overall distribution of unique word count frequencies similar to the following:
+	 * http://thenextweb.com/twitter/2012/01/07/interesting-fact-most-tweets-posted-are-approximately-30-characters-long/
 	 */
 	
 	public static void main(String[] args) throws Exception {
