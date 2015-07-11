@@ -186,7 +186,7 @@ public class median_unique {
 		
 		bw.close();
 		
-		System.out.println("total: " + (System.currentTimeMillis() - time));
+		System.out.println("execution time in ms: " + (System.currentTimeMillis() - time));
 		
 		
 	}
