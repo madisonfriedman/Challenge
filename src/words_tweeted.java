@@ -117,6 +117,9 @@ public class words_tweeted {
 		
 	}
 	
+	//Originally designed to work in producer/consumer model but after implementing BufferedInputStream,
+	//task is no longer I/O-bound, producer thread was no longer needed; this consumer class is made for
+	//parallel processing of parsing and HashMap operations
 	public static class Consumer implements Runnable {
 		ConcurrentHashMap<String, Counter> map;
 		String subString;
@@ -156,7 +159,7 @@ public class words_tweeted {
 			        	
 			        		//if word not found, insert new word into HashMap w/ count of 1
 			        		else{
-			        		map.put(word, new Counter());
+			        			map.put(word, new Counter());
 			        		}
 						
 						pos2 = end2 + 1;
