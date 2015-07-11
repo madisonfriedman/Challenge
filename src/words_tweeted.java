@@ -112,7 +112,7 @@ public class words_tweeted {
 		
 		bw.close();
 		
-		System.out.println("total time " + (System.currentTimeMillis() - time));
+		System.out.println("execution time in ms: " + (System.currentTimeMillis() - time));
 		
 		
 	}
