@@ -1,6 +1,6 @@
 This submission consists of two programs which implement features from each of the two questions in the coding challenge.
 
-Java (version "1.8.0_25") was used exclusively to implement both features with the Mac OS X operating system. Testing was conducted using a 2014 MacBook Air with 4GB memory and an Intel 1.4 GHz Core i5 processor. The No other libraries, environments, or dependencies are required. 
+Java (version "1.8.0_25") was used exclusively to implement both features with the Mac OS X operating system. Testing was conducted using a 2014 MacBook Air with 4GB memory and an Intel 1.4 GHz Core i5 processor. No other libraries, environments, or dependencies are required. 
 
 The structure and content of this file folder adheres strictly to the guidelines set forth in the problem description. To execute each of the source files, use run.sh. The shell script will grab the path to its directory no matter where its located so it can execute the source files regardless of the current directory. Because the directory structure from the prompt was duplicated, all subfolder, input file, and output file names are hardcoded into the source files. The only variable argument passed by run.sh to the java programs is the directory path. Test inputs and outputs are included; they are duplicates of those present in the example repo.
 
