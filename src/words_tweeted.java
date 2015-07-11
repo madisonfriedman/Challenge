@@ -193,7 +193,7 @@ public class words_tweeted {
 		}
 	}
 	
-	//sample skip function from stackoverflow
+	//sample skip function from stackoverflow to help read in files > 2GB
 	public static void skip(InputStream is, long n) throws IOException {
     		while(n > 0) {
         		long n1 = is.skip(n);
