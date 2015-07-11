@@ -85,7 +85,7 @@ public class words_tweeted {
 		 * TreeMap gives O(log(n)) put/get/containsKey time but its really t*O(log(n)) where t is the number
 		 * of tweets; HashMap gives t*O(1) put/get/containsKey time with only one merge sort at O(n*log(n)).
 		 * Because the number of tweets, t, is much larger (5*10^8 tweets per day) than the size of the  
-		 * HashMap, n (there are only 2*10^5 words in the OED), it would be far slower to use the TreeMap.
+		 * HashMap, n (there are only 10^6 english words), it would be far slower to use the TreeMap.
 		 * t*O(1) + O(n*log(n)) << t*O(log(n)); therefore HashMap w/ merge sort is faster.
 		 *
 		 * Also note that while merge sort is a prime candidate for multithreading, becuase our HashMap is
@@ -130,7 +130,7 @@ public class words_tweeted {
 
 			try {
 		
-				//pos is substring starting index, end is substring end index
+				//pos is substring starting index, end is substring ending index
 				int pos1 = 0, end1;
 				String line;
 				String word;
@@ -152,12 +152,12 @@ public class words_tweeted {
 						//if Hashmap contains word, increment count			
 						if (map.containsKey(word)){
 							map.get(word).incrementCount();
-			        	}
+			        		}
 			        	
-			        	//if word not found, insert new word into HashMap w/ count of 1
-			        	else{
+			        		//if word not found, insert new word into HashMap w/ count of 1
+			        		else{
 			        		map.put(word, new Counter());
-			        	}
+			        		}
 						
 						pos2 = end2 + 1;
 					}
