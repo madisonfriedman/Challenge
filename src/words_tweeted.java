@@ -46,10 +46,10 @@ public class words_tweeted {
 
 		//max batch import size in MB, decrease the value if you are getting "OutOfMemoryError" and
 		//increasing JVM max heap size is impossible
-		long userArraySizeLimit = 2000;
+		long importSizeLimit = 2000;
 		
 		//max array length
-		int arrayMaxSize = (int) Math.min(Integer.MAX_VALUE - 5, 1000000*userArraySizeLimit);
+		int arrayMaxSize = (int) Math.min(Integer.MAX_VALUE - 5, 1000000*importSizeLimit);
 		
 		//text file's size in bytes
 		long fileSize = (int) file.length();
