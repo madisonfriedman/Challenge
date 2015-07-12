@@ -97,7 +97,7 @@ public class median_unique {
 				uniqueWords = uniqueWordCount(firstTweet);
 				uniqueWordsHistogram[uniqueWords]++;
 				medianWordCount = uniqueWords;
-				bw.write(medianWordCount + ".00");
+				bw.write(medianWordCount + ".0");
 				bw.newLine();
 				
 				//index is end of firstTweet
@@ -130,7 +130,7 @@ public class median_unique {
 				
 					//median index is inside the index range for the median word count
 					if(medianIndex >= lowerIndexLimit){
-						bw.write(medianWordCount + ".00");
+						bw.write(medianWordCount + ".0");
 						bw.newLine();
 					}
 				
@@ -145,7 +145,7 @@ public class median_unique {
 						upperIndexLimit = lowerIndexLimit - 1;
 						lowerIndexLimit = lowerIndexLimit - uniqueWordsHistogram[medianWordCount];
 					
-						bw.write(medianWordCount + ".00");
+						bw.write(medianWordCount + ".0");
 						bw.newLine();
 					}
 				
@@ -157,7 +157,7 @@ public class median_unique {
 							tempWordCount--;
 						}while(uniqueWordsHistogram[tempWordCount] == 0);
 					
-						bw.write( ( (double) (medianWordCount + tempWordCount)) / (double) 2 + "0");
+						bw.write( ( (double) (medianWordCount + tempWordCount)) / (double) 2 + "");
 						bw.newLine();
 					}
 				}
@@ -168,7 +168,7 @@ public class median_unique {
 				
 					//median index is inside the index range for the median word count
 					if(medianIndex <= upperIndexLimit){
-						bw.write(medianWordCount + ".00");
+						bw.write(medianWordCount + ".0");
 						bw.newLine();
 					}
 				
@@ -182,7 +182,7 @@ public class median_unique {
 						lowerIndexLimit = upperIndexLimit + 1;
 						upperIndexLimit = upperIndexLimit + uniqueWordsHistogram[medianWordCount];
 					
-						bw.write(medianWordCount + ".00");
+						bw.write(medianWordCount + ".0");
 						bw.newLine();
 					}
 				
@@ -194,7 +194,7 @@ public class median_unique {
 							tempWordCount++;
 						}while(uniqueWordsHistogram[tempWordCount] == 0);
 					
-						bw.write( ( (double) (medianWordCount + tempWordCount)) / (double) 2 + "0");
+						bw.write( ( (double) (medianWordCount + tempWordCount)) / (double) 2 + "");
 						bw.newLine();
 					}
 				}
@@ -202,7 +202,7 @@ public class median_unique {
 				//tweet's unique word count equals the median word count
 				else {
 					upperIndexLimit++;
-					bw.write(medianWordCount + ".00");
+					bw.write(medianWordCount + ".0");
 					bw.newLine();
 				}
 				pos = end + 1;
