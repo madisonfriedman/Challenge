@@ -222,10 +222,10 @@ public class median_unique {
 	public static int uniqueWordCount (String line){
 		
 		//add space for parsing purposes
-    	line = line + " ";
+    		line = line + " ";
     	
 		//memory is cheap, go for low lookup cost to boost speed
-    	int capacity = 300;
+    		int capacity = 300;
 		HashMap<String, String> hm = new HashMap<String, String>(capacity);
  		
 		String word;
@@ -240,7 +240,7 @@ public class median_unique {
 			pos = end + 1;
 		}
 		
-        return hm.size();
+        	return hm.size();
 	}
 	
 }
