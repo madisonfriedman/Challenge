@@ -24,9 +24,12 @@ public class words_tweeted {
 		 *  https://en.wikipedia.org/wiki/Hash_table#/media/File:Hash_table_average_insertion_time.png
 		 */
 		
+		//Thread array of size N + 1 where N is the number of computer processors
+		int threadNum = 5;
+		
 		//~50 MB when full	
 		int capacity = 5000000;
-		ConcurrentHashMap<String, Counter> hm = new ConcurrentHashMap<String, Counter>(capacity);
+		ConcurrentHashMap<String, Counter> hm = new ConcurrentHashMap<String, Counter>(capacity, .75f, threadNum);
 
 		/*NOTE: using BufferedInputStream to read in file all at once (or large chunks at a time) is much faster than
 		 * BufferedReader. Separating reading and parsing actions saves a lot of time in I/O heavy tasks like this one.
@@ -70,8 +73,6 @@ public class words_tweeted {
 			String fileString = new String(bytes, "UTF-8");
 			bytes = null;
 			
-			//Thread array of size N + 1 where N is the number of computer processors
-			int threadNum = 5;
 			Consumer[] c = new Consumer[threadNum];
 			Thread[] consumers = new Thread[threadNum];
 			
