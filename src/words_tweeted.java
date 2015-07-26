@@ -174,6 +174,13 @@ public class words_tweeted {
 					while ((end2 = line.indexOf(' ', pos2)) >= 0) {
 						word = line.substring(pos2, end2);
 						
+						/*NOTE: Although there is a possibility of one thread putting a value while the other thread is
+				 		* getting a null from that bucket causing an overwrite decreasing the true count for that word by 1, 
+				 		* the overall chances of this happening are minimal, i.e. sum of squared likelihoods of occurance for 
+				 		* each word and this only applies at the first put of a given word. Performance gains of no
+				 		* synchronization far outweigh chances/effects of overwrite occuring.
+				 		*/
+				 		
 						//if Hashmap contains word, increment count			
 						if (map.containsKey(word)){
 							map.get(word).incrementCount();
