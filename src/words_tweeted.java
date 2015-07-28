@@ -29,14 +29,14 @@ public class words_tweeted {
 		
 		//~50 MB when full	
 		int capacity = 5000000;
-		ConcurrentHashMap<String, Counter> hm = new ConcurrentHashMap<String, Counter>(capacity, .75f, threadNum);
+		ConcurrentHashMap<String, Counter> hm = new ConcurrentHashMap<String, Counter>(capacity, .75f, threadNum - 1);
 
 		/*NOTE: using BufferedInputStream to read in file all at once (or large chunks at a time) is much faster than
 		 * BufferedReader. Separating reading and parsing actions saves a lot of time in I/O heavy tasks like this one.
 		 */
 
 		//read input from tweets.txt
-		String tweetFile = runDirectory + "/tweet_input/tweets.txt";
+		String tweetFile = runDirectory + "/tweet_input/tweets2.txt";
 		File file = new File(tweetFile);
 		FileInputStream fi = new FileInputStream(file);
 		BufferedInputStream bis = new BufferedInputStream(fi);
@@ -64,14 +64,11 @@ public class words_tweeted {
 		
 		for(int i = 0; i < numberOfBisReads; i++){
 		
-			//read entire file (or section of file) into single byte array
+			//read entire file (or section of file) into single byte array, add space for parsing purposes
 			int arraySize = (int) Math.min(arrayMaxSize, bytesRemaining);
-			byte[] bytes = new byte[arraySize];
+			byte[] bytes = new byte[arraySize + 1];
 			bis.read(bytes, 0, arraySize);
-			
-			//convert byte[] to String, UTF-8 is backwards compatable with ASCII
-			String fileString = new String(bytes, "UTF-8");
-			bytes = null;
+			bytes[arraySize] = (byte) ' ';
 			
 			Consumer[] c = new Consumer[threadNum];
 			Thread[] consumers = new Thread[threadNum];
@@ -81,17 +78,16 @@ public class words_tweeted {
 			int end = 0;
 			String subString;
 			
-			//split fileString into substrings for parallel processing
+			//partition array segments among threads for parallel processing
 			for(int j = 0; j < threadNum; j++){
 				
 				end = ( ((int)arraySize * (j + 1)) / threadNum);
-				end = Math.max(end, fileString.indexOf(' ', end));
 				
-				//add newline for parsing purposes
-				subString = fileString.substring(start, end);
-				subString = subString + "\n";
+				while ( bytes[end] != (byte) ' ' ){
+					end++;
+				}
 				
-				c[j] = new Consumer(hm, subString);
+				c[j] = new Consumer(hm, bytes, start, end);
 				consumers[j] = new Thread(c[j]);
 				consumers[j].start();
 				
@@ -104,8 +100,8 @@ public class words_tweeted {
 			
 			/*NOTE: Using HashMap w/ merge sort is preferable to using TreeMap w/o merge sort.
 			 * TreeMap gives O(log(n)) put/get/containsKey time but its really t*O(log(n)) where t is the number
-			 * of tweeted words; HashMap gives t*O(1) put/get/containsKey time with only one merge sort at O(n*log(n)).
-			 * Because the number of tweet words, t, is much larger (5*10^8 tweets per day * words/tweet) than the size of the  
+			 * of tweets; HashMap gives t*O(1) put/get/containsKey time with only one merge sort at O(n*log(n)).
+			 * Because the number of tweets, t, is much larger (5*10^8 tweets per day) than the size of the  
 			 * HashMap, n (there are only 10^6 english words), it would be far slower to use the TreeMap.
 			 * t*O(1) + O(n*log(n)) << t*O(log(n)); therefore HashMap w/ merge sort is faster.
 			 *
@@ -144,56 +140,57 @@ public class words_tweeted {
 	//parallel processing of parsing and HashMap operations
 	public static class Consumer implements Runnable {
 		ConcurrentHashMap<String, Counter> map;
-		String subString;
+		byte[] bytes;
+		int startIndex;
+		int endIndex;
 		
-		Consumer(ConcurrentHashMap<String, Counter> hm, String s) { 
+		Consumer(ConcurrentHashMap<String, Counter> hm, byte[] b, int start, int end) { 
 			map = hm;
-			subString = s;
+			bytes = b;
+			startIndex = start;
+			endIndex = end;
 		}
 
 		public void run() {
 
 			try {
 		
-				//pos is substring starting index, end is substring ending index
-				int pos1 = 0, end1;
-				String line;
-				String word;
+				//pos is array starting index
+				int pos = startIndex;
+				byte space = (byte) ' ';
+				byte newLine = (byte) '\n';
 				
-				/*NOTE: using a custom 'indexOf' parser is much faster than both String.split() and Guava Splitter.
-				 * Using nested loop for '\n' and ' ' parsing is much faster than using one loop after str.replace('\n',' ')
-				 */
-					
-				while ((end1 = subString.indexOf('\n', pos1)) >= 0) {
-					
-					//space added to line for parsing purposes
-					line = subString.substring(pos1, end1);
-					line = line + " ";
-					int pos2 = 0, end2;
-					
-					while ((end2 = line.indexOf(' ', pos2)) >= 0) {
-						word = line.substring(pos2, end2);
+				//iterate through array segment parsing words and perform hashmap operations, this method is much faster 
+				//than any string parsing method such as String.split, tokenizer, Guava splitter, indexOf() etc.
+				for (int i = startIndex; i < endIndex + 1; i++){
+					if (bytes[i] == space || bytes[i] == newLine){
+						
+						//generate string object of word from array segment
+						byte[] temp = new byte[i - pos];
+						System.arraycopy(bytes, pos, temp, 0, temp.length);
+						String word = new String(temp, "UTF-8");
 						
 						/*NOTE: Although there is a possibility of one thread putting a value while the other thread is
-				 		* getting a null from that bucket causing an overwrite decreasing the true count for that word by 1, 
-				 		* the overall chances of this happening are minimal, i.e. sum of squared likelihoods of occurance for 
-				 		* each word and this only applies at the first put of a given word. Performance gains of no
-				 		* synchronization far outweigh chances/effects of overwrite occuring.
-				 		*/
-				 		
-						//if Hashmap contains word, increment count			
+						 * getting a null from that bucket thus causing an overwrite and decreasing the true count for that word by 1, 
+						 * the overall chances of this happening are minimal, i.e. the sum of squared likelihoods of occurance for 
+						 * each word during the first put of a that word. Performance gains of no synchronization far outweigh
+						 * chances/effects of overwrite occuring.
+					         */
+						
+						//if hashmap contains word, increment count
 						if (map.containsKey(word)){
 							map.get(word).incrementCount();
-			        		}
+						}
 			        	
-			        		//if word not found, insert new word into HashMap w/ count of 1
-			        		else{
-			        			map.put(word, new Counter());
-			        		}
+						//if word not found, insert new word into HashMap w/ count of 1
+						else{
+							map.put(word, new Counter());
+						}
 						
-						pos2 = end2 + 1;
+						pos = i + 1;
+						
 					}
-					pos1 = end1 + 1;
+					
 				}
 				
 			}
@@ -203,8 +200,7 @@ public class words_tweeted {
 		}
 	}
 	
-	
-	//counter class to increment word occurence count
+	//counter class to increment word occurrence count
 	public static class Counter{
 		
 		int count;
