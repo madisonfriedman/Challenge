@@ -36,7 +36,7 @@ public class words_tweeted {
 		 */
 
 		//read input from tweets.txt
-		String tweetFile = runDirectory + "/tweet_input/tweets2.txt";
+		String tweetFile = runDirectory + "/tweet_input/tweets.txt";
 		File file = new File(tweetFile);
 		FileInputStream fi = new FileInputStream(file);
 		BufferedInputStream bis = new BufferedInputStream(fi);
