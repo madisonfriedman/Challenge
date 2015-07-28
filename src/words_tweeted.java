@@ -100,9 +100,9 @@ public class words_tweeted {
 			
 			/*NOTE: Using HashMap w/ merge sort is preferable to using TreeMap w/o merge sort.
 			 * TreeMap gives O(log(n)) put/get/containsKey time but its really t*O(log(n)) where t is the number
-			 * of tweets; HashMap gives t*O(1) put/get/containsKey time with only one merge sort at O(n*log(n)).
-			 * Because the number of tweets, t, is much larger (5*10^8 tweets per day) than the size of the  
-			 * HashMap, n (there are only 10^6 english words), it would be far slower to use the TreeMap.
+			 * of tweeted words; HashMap gives t*O(1) put/get/containsKey time with only one merge sort at O(n*log(n)).
+			 * Because the number of tweeted words, t, is much larger (5*10^8 tweets per day * words/tweet) than 
+			 * the size of the HashMap, n (there are only 10^6 english words), it would be far slower to use the TreeMap.
 			 * t*O(1) + O(n*log(n)) << t*O(log(n)); therefore HashMap w/ merge sort is faster.
 			 *
 			 * Also note that while merge sort is a prime candidate for multithreading, becuase our HashMap is
