@@ -52,7 +52,7 @@ public class words_tweeted {
 		long importSizeLimit = 2000;
 		
 		//max array length
-		int arrayMaxSize = (int) Math.min(Integer.MAX_VALUE - 5, 1000000*importSizeLimit);
+		int arrayMaxSize = (int) Math.min(Integer.MAX_VALUE - 6, 1000000*importSizeLimit);
 		
 		//text file's size in bytes
 		long fileSize = (int) file.length();
